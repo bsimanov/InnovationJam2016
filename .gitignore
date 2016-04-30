@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+#Compiled binary addons
+build/Release
+
+# Dependency directory 
+node_modules
+
+# User Environment Variables
+.lock-wscript
