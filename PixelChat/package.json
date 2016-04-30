@@ -13,7 +13,12 @@
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
-     "node-fetch": "^1.5.1",
-    "node-uuid": "^1.4.7"
+    "node-fetch": "^1.5.1",
+    "node-uuid": "^1.4.7",
+    "googleapis": "^5.2.1",
+    "google-auth-library": "^0.9.7"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
   }
 }
