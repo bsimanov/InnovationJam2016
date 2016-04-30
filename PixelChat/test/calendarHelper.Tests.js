@@ -27,9 +27,20 @@ describe('CalendarHelper', function() {
     })
 
     return testPromise.then(function(result) {
-      expect(result).to.equal(true);
+      var events = result.items;
+      
+      if (events.length == 0) {
+        console.log('No upcoming events found.');
+      } else {
+        console.log('Upcoming 10 events:');
+        for (var i = 0; i < events.length; i++) {
+          var event = events[i];
+          var start = event.start.dateTime || event.start.date;
+          console.log('%s - %s', start, event.summary);
+        }
+      }
+      expect(result).to.not.equal(null);
     });
-    // expect(helper.getFreeTime('goldenfreedomcoders', 'innojam2016', '2016-04-30', '2016-04-31')).to.equal(true);
   }));
 
 });
