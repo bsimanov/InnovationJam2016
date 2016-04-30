@@ -1,41 +1,42 @@
 var express = require('express');
+
+var https = require('https');
+
+
+
+
+
+
 var router = express.Router();
 
-const Wit = require('node-wit').Wit;
+const Wit = require('wit-node');
 const WIT_TOKEN = 'I3YIED2VEPKOWTI42FXITQOMLEOWJ544';
 
-const actions = {
+var actions = {
   say(sessionId, context, message, cb) {
     console.log(message);
-    
+    cb();
   },
   merge(sessionId, context, entities, message, cb) {
-    
+    cb(context);
     
   },
   error(sessionId, context, error) {
     console.log(error.message);
-  },
+  }
 };
 
 router.get('/', function(req, res, next) {
-  const witcontext = {};
-  
-  
-  var client = new Wit(WIT_TOKEN,actions);
-  console.log("Gothere");
-  const context = {};
-  client.message('what is the weather in London?', 
-      witcontext, 
-      function(error, data) {
-        if (error) {
-          console.log('Oops! Got an error: ' + error);
-          res.send("Error");
-        } else {
-          res.send(JSON.stringify(data));
-          console.log('Yay, got Wit.ai response: ' + JSON.stringify(data));
-        }
-      });
+console.log("Hello");
+  var options = {
+        host: 'google.com',
+        path: '/'
+
+      };
+  https.request(options, function(response) {
+    console.log(response);
+    
+  });
 
 });
 
