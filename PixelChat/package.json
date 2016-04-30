@@ -25,6 +25,7 @@
     "wit-node": "0.0.5"
   },
   "devDependencies": {
+    "mocha": "^2.4.5",
     "chai": "^3.5.0"
   }
 }

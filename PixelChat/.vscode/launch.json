@@ -32,6 +32,17 @@
 			"outDir": null,
 			"localRoot": "${workspaceRoot}",
 			"remoteRoot": null
+
+		},
+		{
+			"name": "Mocha",
+			"type": "node",
+			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+			"stopOnEntry": false,
+			"cwd": "${workspaceRoot}",
+			"runtimeExecutable": null,
+			"env": { "NODE_ENV": "development"}
+
 		}
 	]
 }
