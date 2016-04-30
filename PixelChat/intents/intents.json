@@ -1,0 +1,30 @@
+[
+    {
+        "name": "meeting_request",
+        "doc": "detect that users would like to schedule an calendar event",
+        "expressions": [
+            {
+                "body": "let's get together"
+            },
+            {
+                "body": "let schedule some time to talk later"
+            }
+        ]
+    },
+    {
+        "name": "query_cal",
+        "doc": "Am I busy base on my calendar",
+        "expressions": [
+            {
+                "body": "What is my upcoming appointment"
+            },
+            {
+                "body": "Where is my next meeting"
+            },
+            {
+                "body": "When is my first meeting tommorrow"
+            }
+            
+        ]
+    }
+]
