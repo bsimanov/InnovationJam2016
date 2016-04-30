@@ -16,6 +16,12 @@
     "node-uuid": "^1.4.7",
     "node-wit": "^3.2.2",
     "nodemon": "^1.9.2",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "googleapis": "^5.2.1",
+    "google-auth-library": "^0.9.7"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
+
   }
 }
