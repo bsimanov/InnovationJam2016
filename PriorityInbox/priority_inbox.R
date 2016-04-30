@@ -21,9 +21,12 @@
 # Load libraries
 library(tm)
 library(ggplot2)
+library(plyr)
 
 # Set the global paths
-data.path <- "../../03-SPAM_Classification/code/data/"
+#data.path <- "../../03-SPAM_Classification/code/data/"
+#easyham.path <- paste(data.path,"easy_ham/", sep = "")
+data.path <- "c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/"
 easyham.path <- paste(data.path,"easy_ham/", sep = "")
 
 # We define a set of function that will extract the data
@@ -105,8 +108,13 @@ names(allparse.df) <- c("Date", "From.EMail", "Subject", "Message", "Path")
 # contain slightly different date format pattners we have to account for
 # this by passining them as required partmeters of the function. 
 date.converter <- function(dates, pattern1, pattern2) {
-    pattern1.convert <- strptime(dates, pattern1)
-    pattern2.convert <- strptime(dates, pattern2)
+
+		# broken: df$tm <- strptime(paste(dates, times), "%m/%d/%y %H:%M:%S")
+		#working: df$tm <- as.POSIXct(strptime(paste(dates, times), "%m/%d/%y %H:%M:%S"))
+
+
+    pattern1.convert <- as.POSIXct(strptime(dates, pattern1))
+    pattern2.convert <- as.POSIXct(strptime(dates, pattern2))
     pattern1.convert[is.na(pattern1.convert)] <- pattern2.convert[is.na(pattern1.convert)]
     return(pattern1.convert)
 }
@@ -142,11 +150,12 @@ from.scales <- ggplot(from.ex)+
     geom_rect(aes(xmin = 1:nrow(from.ex) - 0.5, xmax = 1:nrow(from.ex) + 0.5, 
         ymin = 0, ymax = Freq, fill = "lightgrey", color = "darkblue")) +
     scale_x_continuous(breaks = 1:nrow(from.ex), labels = from.ex$From.EMail) +
-    coord_flip() + scale_fill_manual(values = c("lightgrey" = "lightgrey"), legend = FALSE) +
-    scale_color_manual(values = c("darkblue" = "darkblue"), legend = FALSE) +
+    coord_flip() + scale_fill_manual(values = c("lightgrey" = "lightgrey"), guide = FALSE) +
+    scale_color_manual(values = c("darkblue" = "darkblue"), guide = FALSE) +
     ylab("Number of Emails Received (truncated at 6)") + xlab("Sender Address") +
-    theme_bw() + opts(axis.text.y = theme_text(size = 5, hjust = 1))
-ggsave(plot = from.scales, filename = "../images/0011_from_scales.pdf", height = 4.8, width = 7)
+    theme_bw() 
+    #+ labs(axis.text.y = theme_text(size = 5, hjust = 1))
+ggsave(plot = from.scales, filename = "c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//0011_from_scales.pdf", height = 4.8, width = 7)
 
 # Log weight scheme, very simple but effective
 from.weight <- transform(from.weight, Weight = log(Freq + 1), log10Weight = log10(Freq + 1))   
@@ -157,8 +166,9 @@ from.rescaled <- ggplot(from.weight, aes(x = 1:nrow(from.weight))) +
     geom_line(aes(y = Freq, linetype = "Absolute")) +
     scale_linetype_manual(values = c("ln" = 1, "log10" = 2, "Absolute" = 3), name = "Scaling") +
     xlab("") + ylab("Number of emails Receieved") +
-    theme_bw() + opts(axis.text.y = theme_blank(), axis.text.x = theme_blank())
-ggsave(plot = from.rescaled, filename = "../images/0012_from_rescaled.pdf", height = 4.8, width = 7)
+    theme_bw()
+    #+ labs(axis.text.y = theme_blank(), axis.text.x = theme_blank())
+ggsave(plot = from.rescaled, filename = "c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//0012_from_rescaled.pdf", height = 4.8, width = 7)
     
 
 # To calculate the rank priority of an email we should calculate some probability that 
@@ -353,9 +363,9 @@ priority.threshold <- median(train.ranks.df$Rank)
 # Visualize the results to locate threshold
 threshold.plot <- ggplot(train.ranks.df, aes(x=Rank))+stat_density(aes(fill="darkred"))+
     geom_vline(xintercept=priority.threshold, linetype=2)+
-    scale_fill_manual(values=c("darkred"="darkred"), legend=FALSE)+
+    scale_fill_manual(values=c("darkred"="darkred"), guide=FALSE)+
     theme_bw()
-ggsave(plot=threshold.plot, filename="../images/01_threshold_plot.pdf", height=4.7, width=7)
+ggsave(plot=threshold.plot, filename="c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//01_threshold_plot.pdf", height=4.7, width=7)
 
 
 # Classify as priority, or not
@@ -376,11 +386,12 @@ final.df$Date <- date.converter(final.df$Date, pattern1, pattern2)
 final.df <- final.df[rev(with(final.df, order(Date))),]
 
 # Save final data set and plot results.
-write.csv(final.df, "data/final_df.csv", row.names=FALSE)
+write.csv(final.df, "c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//final_df.csv", row.names=FALSE)
 
 testing.plot <- ggplot(subset(final.df, Type=="TRAINING"), aes(x=Rank))+stat_density(aes(fill=Type,alpha=0.65))+
     stat_density(data=subset(final.df, Type=="TESTING"), aes(fill=Type, alpha=0.65))+
-    geom_vline(xintercept=priority.threshold, linetype=2)+scale_alpha(legend=FALSE)+
+    geom_vline(xintercept=priority.threshold, linetype=2)+scale_alpha(guide=FALSE)+
     scale_fill_manual(values=c("TRAINING"="darkred","TESTING"="darkblue"))+
     theme_bw()
-ggsave(plot=testing.plot, filename="../images/02_testing_plot.pdf", height=4.7, width=7)
+ggsave(plot=testing.plot, filename="c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//02_testing_plot.pdf", height=4.7, width=7)
+
