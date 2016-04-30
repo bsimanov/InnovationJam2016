@@ -31,6 +31,7 @@ easyham.path <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data
 
 ## you can call it whatever you want, but only keep 1 file here
 onetime.path <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/inbox/"
+onetime.fn   <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/inbox/email.txt"
 
 ## OUTPUT GOES HERE
 ## this is the classification and training of emails... use this to pull test cases from.. .look up priority column and the path of the file to get the 'content'
@@ -368,21 +369,31 @@ write.csv(final.df, output.fn5, row.names=FALSE)
 
 ### this is the new one time logic
 
-onetime.docs <- dir(onetime.path)
-onetime.parse <- lapply(onetime.docs, function(p) parse.email(paste(onetime.path, p, sep = "")))
+evaluate.msg <- function(emailBody) {
 
-onetime.paths <- onetime.parse[[1]][5]
+		fileConn<-file(onetime.fn)
+		writeLines(emailBody, fileConn)
+		close(fileConn)
 
-test.ranks <- suppressWarnings(lapply(onetime.paths,rank.message))
-test.ranks.matrix <- do.call(rbind, test.ranks)
-test.ranks.matrix <- cbind(test.paths, test.ranks.matrix, "TESTING")
-test.ranks.df <- data.frame(test.ranks.matrix, stringsAsFactors = FALSE)
-names(test.ranks.df) <- c("Message","Date","From","Subj","Rank","Type")
-test.ranks.df$Rank <- as.numeric(test.ranks.df$Rank)
-test.ranks.df$Priority <- ifelse(test.ranks.df$Rank >= priority.threshold, 1, 0)
+		onetime.docs <- dir(onetime.path)
+		onetime.parse <- lapply(onetime.docs, function(p) parse.email(paste(onetime.path, p, sep = "")))
+		
+		onetime.paths <- onetime.parse[[1]][5]
+		
+		test.ranks <- suppressWarnings(lapply(onetime.paths,rank.message))
+		test.ranks.matrix <- do.call(rbind, test.ranks)
+		test.ranks.matrix <- cbind(test.paths, test.ranks.matrix, "TESTING")
+		test.ranks.df <- data.frame(test.ranks.matrix, stringsAsFactors = FALSE)
+		names(test.ranks.df) <- c("Message","Date","From","Subj","Rank","Type")
+		test.ranks.df$Rank <- as.numeric(test.ranks.df$Rank)
+		test.ranks.df$Priority <- ifelse(test.ranks.df$Rank >= priority.threshold, 1, 0)
+		
+		# 1 means important ... it's output to the console
+		test.ranks.df$Priority
 
-# 1 means important ... it's output to the console
-test.ranks.df$Priority
+    return(paste(test.ranks.df$Priority))
+}
+
 
 
 
