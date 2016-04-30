@@ -24,10 +24,18 @@ library(ggplot2)
 library(plyr)
 
 # Set the global paths
-#data.path <- "../../03-SPAM_Classification/code/data/"
-#easyham.path <- paste(data.path,"easy_ham/", sep = "")
-data.path <- "c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/"
-easyham.path <- paste(data.path,"easy_ham/", sep = "")
+
+## INPUT EMAILS GO HERE
+easyham.path <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/easy_ham3/"
+onetime.path <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/inbox/"
+
+## OUTPUT GOES HERE
+output.fn1<-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/output/0011_from_scales.pdf"
+output.fn2<-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/output/0012_from_rescaled.pdf"
+output.fn3<-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/output/01_threshold_plot.pdf"
+output.fn4<-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/output/02_testing_plot.pdf"
+output.fn5<-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/output/final_df.csv"
+
 
 # We define a set of function that will extract the data
 # for the feature set we have defined to rank email
@@ -146,29 +154,29 @@ from.weight <- from.weight[with(from.weight, order(Freq)),]
 # correspondents.
 from.ex <- subset(from.weight, Freq>6)
 
-from.scales <- ggplot(from.ex)+
-    geom_rect(aes(xmin = 1:nrow(from.ex) - 0.5, xmax = 1:nrow(from.ex) + 0.5, 
-        ymin = 0, ymax = Freq, fill = "lightgrey", color = "darkblue")) +
-    scale_x_continuous(breaks = 1:nrow(from.ex), labels = from.ex$From.EMail) +
-    coord_flip() + scale_fill_manual(values = c("lightgrey" = "lightgrey"), guide = FALSE) +
-    scale_color_manual(values = c("darkblue" = "darkblue"), guide = FALSE) +
-    ylab("Number of Emails Received (truncated at 6)") + xlab("Sender Address") +
-    theme_bw() 
-    #+ labs(axis.text.y = theme_text(size = 5, hjust = 1))
-ggsave(plot = from.scales, filename = "c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//0011_from_scales.pdf", height = 4.8, width = 7)
+#from.scales <- ggplot(from.ex)+
+#    geom_rect(aes(xmin = 1:nrow(from.ex) - 0.5, xmax = 1:nrow(from.ex) + 0.5, 
+#        ymin = 0, ymax = Freq, fill = "lightgrey", color = "darkblue")) +
+#    scale_x_continuous(breaks = 1:nrow(from.ex), labels = from.ex$From.EMail) +
+#    coord_flip() + scale_fill_manual(values = c("lightgrey" = "lightgrey"), guide = FALSE) +
+#    scale_color_manual(values = c("darkblue" = "darkblue"), guide = FALSE) +
+#    ylab("Number of Emails Received (truncated at 6)") + xlab("Sender Address") +
+#    theme_bw() 
+#    #+ labs(axis.text.y = theme_text(size = 5, hjust = 1))
+#ggsave(plot = from.scales, filename = output.fn1, height = 4.8, width = 7)
 
 # Log weight scheme, very simple but effective
 from.weight <- transform(from.weight, Weight = log(Freq + 1), log10Weight = log10(Freq + 1))   
 
-from.rescaled <- ggplot(from.weight, aes(x = 1:nrow(from.weight))) +
-    geom_line(aes(y = Weight, linetype = "ln")) +
-    geom_line(aes(y = log10Weight, linetype = "log10")) +
-    geom_line(aes(y = Freq, linetype = "Absolute")) +
-    scale_linetype_manual(values = c("ln" = 1, "log10" = 2, "Absolute" = 3), name = "Scaling") +
-    xlab("") + ylab("Number of emails Receieved") +
-    theme_bw()
-    #+ labs(axis.text.y = theme_blank(), axis.text.x = theme_blank())
-ggsave(plot = from.rescaled, filename = "c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//0012_from_rescaled.pdf", height = 4.8, width = 7)
+#from.rescaled <- ggplot(from.weight, aes(x = 1:nrow(from.weight))) +
+#    geom_line(aes(y = Weight, linetype = "ln")) +
+#    geom_line(aes(y = log10Weight, linetype = "log10")) +
+#    geom_line(aes(y = Freq, linetype = "Absolute")) +
+#    scale_linetype_manual(values = c("ln" = 1, "log10" = 2, "Absolute" = 3), name = "Scaling") +
+#    xlab("") + ylab("Number of emails Receieved") +
+#    theme_bw()
+#    #+ labs(axis.text.y = theme_blank(), axis.text.x = theme_blank())
+#ggsave(plot = from.rescaled, filename = output.fn2, height = 4.8, width = 7)
     
 
 # To calculate the rank priority of an email we should calculate some probability that 
@@ -361,11 +369,11 @@ train.ranks.df$Rank <- as.numeric(train.ranks.df$Rank)
 priority.threshold <- median(train.ranks.df$Rank)
 
 # Visualize the results to locate threshold
-threshold.plot <- ggplot(train.ranks.df, aes(x=Rank))+stat_density(aes(fill="darkred"))+
-    geom_vline(xintercept=priority.threshold, linetype=2)+
-    scale_fill_manual(values=c("darkred"="darkred"), guide=FALSE)+
-    theme_bw()
-ggsave(plot=threshold.plot, filename="c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//01_threshold_plot.pdf", height=4.7, width=7)
+#threshold.plot <- ggplot(train.ranks.df, aes(x=Rank))+stat_density(aes(fill="darkred"))+
+#    geom_vline(xintercept=priority.threshold, linetype=2)+
+#    scale_fill_manual(values=c("darkred"="darkred"), guide=FALSE)+
+#    theme_bw()
+#ggsave(plot=threshold.plot, filename=output.fn3, height=4.7, width=7)
 
 
 # Classify as priority, or not
@@ -386,12 +394,31 @@ final.df$Date <- date.converter(final.df$Date, pattern1, pattern2)
 final.df <- final.df[rev(with(final.df, order(Date))),]
 
 # Save final data set and plot results.
-write.csv(final.df, "c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//final_df.csv", row.names=FALSE)
+write.csv(final.df, output.fn5, row.names=FALSE)
 
-testing.plot <- ggplot(subset(final.df, Type=="TRAINING"), aes(x=Rank))+stat_density(aes(fill=Type,alpha=0.65))+
-    stat_density(data=subset(final.df, Type=="TESTING"), aes(fill=Type, alpha=0.65))+
-    geom_vline(xintercept=priority.threshold, linetype=2)+scale_alpha(guide=FALSE)+
-    scale_fill_manual(values=c("TRAINING"="darkred","TESTING"="darkblue"))+
-    theme_bw()
-ggsave(plot=testing.plot, filename="c://InnovationJam2016//Source//InnovationJam2016//PriorityInbox//output//02_testing_plot.pdf", height=4.7, width=7)
+#testing.plot <- ggplot(subset(final.df, Type=="TRAINING"), aes(x=Rank))+stat_density(aes(fill=Type,alpha=0.65))+
+#    stat_density(data=subset(final.df, Type=="TESTING"), aes(fill=Type, alpha=0.65))+
+#    geom_vline(xintercept=priority.threshold, linetype=2)+scale_alpha(guide=FALSE)+
+#    scale_fill_manual(values=c("TRAINING"="darkred","TESTING"="darkblue"))+
+#    theme_bw()
+#ggsave(plot=testing.plot, filename=output.fn4, height=4.7, width=7)
+
+
+onetime.docs <- dir(onetime.path)
+onetime.parse <- lapply(onetime.docs, function(p) parse.email(paste(onetime.path, p, sep = "")))
+
+onetime.paths <- onetime.parse[[1]][5]
+
+test.ranks <- suppressWarnings(lapply(onetime.paths,rank.message))
+test.ranks.matrix <- do.call(rbind, test.ranks)
+test.ranks.matrix <- cbind(test.paths, test.ranks.matrix, "TESTING")
+test.ranks.df <- data.frame(test.ranks.matrix, stringsAsFactors = FALSE)
+names(test.ranks.df) <- c("Message","Date","From","Subj","Rank","Type")
+test.ranks.df$Rank <- as.numeric(test.ranks.df$Rank)
+test.ranks.df$Priority <- ifelse(test.ranks.df$Rank >= priority.threshold, 1, 0)
+
+# 1 means important
+test.ranks.df$Priority
+
+
 
