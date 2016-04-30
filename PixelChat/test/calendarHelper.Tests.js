@@ -8,10 +8,11 @@ describe('CalendarHelper', function() {
     expect(helper.hasFreeTime()).to.equal(0);
   }),
   
-  it('getFreeTime', function() {
+  it('getFreeTime for goldenfreedomcoders', function() {
+    var calendarId = "goldenfreedomcoders";
     var helper = new CalendarHelper();
     var params = {
-      calendar: ["goldenfreedomcoders", "innojam2016"],
+      calendarId: calendarId,
       timeMin: "2016-04-30",
       timeMax: '2016-04-21'
     };
@@ -29,9 +30,45 @@ describe('CalendarHelper', function() {
     return testPromise.then(function(result) {
       var events = result.items;
       if (events.length == 0) {
-        console.log('No upcoming events found.');
+        console.log('[' + calendarId + '] No upcoming events found.');
       } else {
-        console.log('Upcoming 10 events:');
+        console.log('[' + calendarId + '] Upcoming 10 events:');
+        for (var i = 0; i < events.length; i++) {
+          var event = events[i];
+          var start = event.start.dateTime || event.start.date;
+          console.log('%s - %s', start, event.summary);
+        }
+      }
+      
+      expect(result).to.not.equal(null);
+    });
+  }),
+  
+  it('getFreeTime for innojam2016', function() {
+    var calendarId = "innojam2016";
+    var helper = new CalendarHelper();
+    var params = {
+      calendarId: calendarId,
+      timeMin: "2016-04-30",
+      timeMax: '2016-04-21'
+    };
+
+    var testPromise = new Promise(function(resolve, reject) {
+      helper.getFreeTime(params, function(err, response) {
+        if (err) {
+          console.log("Error: " + err);
+          reject(err);
+        }
+        resolve(response);
+      });
+    })
+
+    return testPromise.then(function(result) {
+      var events = result.items;
+      if (events.length == 0) {
+        console.log('[' + calendarId + '] No upcoming events found.');
+      } else {
+        console.log('[' + calendarId + '] Upcoming 10 events:');
         for (var i = 0; i < events.length; i++) {
           var event = events[i];
           var start = event.start.dateTime || event.start.date;

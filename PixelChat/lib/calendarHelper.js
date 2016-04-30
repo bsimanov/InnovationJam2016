@@ -10,7 +10,7 @@ CalendarHelper.prototype.getFreeTime = function(params, callback) {
   // console.log(params.calendar[1]);
   // console.log(new Date(params.timeMin).toISOString());
   // console.log(new Date(params.timeMax).toISOString());
-  var auth = googleAuth.getAuth(params.calendar[0]);
+  var auth = googleAuth.getAuth(params.calendarId);
   listEvents(auth, callback);
 }
 
