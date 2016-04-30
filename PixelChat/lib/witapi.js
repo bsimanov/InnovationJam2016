@@ -1,5 +1,5 @@
 var req = require('request');
-var q = require('Q');
+var q = require('q');
 function WitApi(token) {  
     this.token = token;
     
@@ -25,7 +25,7 @@ WitApi.prototype.getIntent = function(message) {
          } else {
              console.log(JSON.stringify(response) + "--\n" + body);
              if (response.statusCode === 200) {
-                 deferred.resolve(body);
+                 deferred.resolve(JSON.parse(body));
              }
              else  
              {
