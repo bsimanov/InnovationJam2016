@@ -3,11 +3,6 @@ var expect = chai.expect; // we are using the "expect" style of Chai
 var CalendarHelper = require('./../lib/calendarHelper');
 
 describe('CalendarHelper', function() {
-  it('First test', function() {
-    var helper = new CalendarHelper();
-    expect(helper.hasFreeTime()).to.equal(0);
-  }),
-  
   it('getFreeTime for goldenfreedomcoders', function() {
     var calendarId = "goldenfreedomcoders";
     var helper = new CalendarHelper();
@@ -16,16 +11,8 @@ describe('CalendarHelper', function() {
       timeMin: "2016-04-30",
       timeMax: '2016-04-21'
     };
-
-    var testPromise = new Promise(function(resolve, reject) {
-      helper.getFreeTime(params, function(err, response) {
-        if (err) {
-          console.log("Error: " + err);
-          reject(err);
-        }
-        resolve(response);
-      });
-    })
+    
+    var testPromise = helper.getFreeTime(params);
 
     return testPromise.then(function(result) {
       var events = result.items;
@@ -53,15 +40,7 @@ describe('CalendarHelper', function() {
       timeMax: '2016-04-21'
     };
 
-    var testPromise = new Promise(function(resolve, reject) {
-      helper.getFreeTime(params, function(err, response) {
-        if (err) {
-          console.log("Error: " + err);
-          reject(err);
-        }
-        resolve(response);
-      });
-    })
+    var testPromise = helper.getFreeTime(params);
 
     return testPromise.then(function(result) {
       var events = result.items;
@@ -88,18 +67,9 @@ describe('CalendarHelper', function() {
       timeMax: '2016-04-21'
     };
 
-    var testPromise = new Promise(function(resolve, reject) {
-      helper.addEvent(params, function(err, response) {
-        if (err) {
-          console.log("Error: " + err);
-          reject(err);
-        }
-        resolve(response);
-      });
-    })
+    var testPromise = helper.addEvent(params);
 
     return testPromise.then(function(result) {
-      
       expect(result).to.not.equal(null);
     });
   })

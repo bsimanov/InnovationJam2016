@@ -1,28 +1,46 @@
 //var fs = require('fs');
-var readline = require('readline');
+// var readline = require('readline');
+var q = require('Q');
 var google = require('googleapis');
 var googleAuth = require('./../lib/googleAuth');
 
 function CalendarHelper() {}
 
-CalendarHelper.prototype.getFreeTime = function(params, callback) {
-  // console.log(params.calendar[0]);
-  // console.log(params.calendar[1]);
-  // console.log(new Date(params.timeMin).toISOString());
-  // console.log(new Date(params.timeMax).toISOString());
+CalendarHelper.prototype.getFreeTime = function(params) {
+  var deferred = q.defer();
+  
   var auth = googleAuth.getAuth(params.calendarId);
-  listEvents(auth, callback);
+  listEvents(auth, function(err, response) {
+    if (err)
+    {
+       console.log(err);
+       deferred.reject(new Error(err));
+    } else {
+      deferred.resolve(response);
+    }
+  });
+  return deferred.promise;
 }
 
-CalendarHelper.prototype.addEvent = function(params, callback) {
+CalendarHelper.prototype.addEvent = function(params) {
+  var deferred = q.defer();
+  
   console.log("Adding event to: " + params.calendar[0]);
   var auth = googleAuth.getAuth(params.calendar[0]);
-  insertEvent(auth, callback);
+  insertEvent(auth, function(err, response) {
+    if (err) {
+      console.log("Error: " + err);
+      deferred.reject(new Error(err));
+    }
+    else {
+      deferred.resolve(response);
+    }
+  });
+  return deferred.promise;
 }
 
-CalendarHelper.prototype.hasFreeTime = function() {
-  return 0;
-};
+
+
 
 function listEvents(auth, callback) {
   var calendar = google.calendar('v3');
