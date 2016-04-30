@@ -1,10 +1,13 @@
 var rio = require("rio");
 
+rio.enableDebug(true);
+
+
 rio.e({command: "pi / 2 * 2"});
 rio.e({command: "c(1, 2)"});
 rio.e({command: "as.character('Hello World')"});
 rio.e({command: "c('a', 'b')"});
-rio.e({command: "Sys.sleep(5); 11"})
+//rio.e({command: "Sys.sleep(5); 11"})
 
 rio.$e({
     command: "pi / 2 * 2"
@@ -17,3 +20,12 @@ rio.e({
 }).e({
     command: "3 + 3"
 });
+
+
+rio.e({command: "exampleFunction('xyz')"});
+rio.e({command: "evaluate.msg('xyz')"});
+
+
+
+
+
