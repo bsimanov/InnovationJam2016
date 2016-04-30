@@ -14,7 +14,20 @@ router.get('/',function(req, res, next) {
           result.Intent = intent.outcomes[0].entities.intent[0].value;
           switch(result.Intent) {
             case "meeting_invite":
-              result.say = "Inviting Meeting";
+              var saytext =  "Inviting Meeting ";
+              // time of day
+              if (intent.outcomes[0].entities.meeting_range)
+              {
+                
+                var fromdate = new Date(intent.outcomes[0].entities.meeting_range[0].from.value);
+                var todate = new Date(intent.outcomes[0].entities.meeting_range[0].to.value);
+                
+                saytext = saytext + fromdate.toLocaleString() + 
+                      " to " + todate.toLocaleString();
+              }
+              // date
+            
+              result.say = saytext;
               break;
             case "query_calendar":
               result.say = "Your next appoint is at"  
