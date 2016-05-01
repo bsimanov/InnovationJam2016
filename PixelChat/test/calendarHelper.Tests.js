@@ -59,6 +59,27 @@ describe('CalendarHelper', function() {
     });
   }),
   
+  it('freeTime for goldenfreedomcoders & innojam2016', function() {
+    var calendarId = "goldenfreedomcoders";
+    var helper = new CalendarHelper();
+    var resource = {
+      timeMin: "2016-05-01T00:00:00.000-05:00",
+      timeMax: "2016-05-02T12:00:00.000-05:00",
+      items: [{
+        id: "goldenfreedomcoders@gmail.com"
+      }, {
+        id: "innojam2016@gmail.com"
+      }]
+    };
+    
+    var testPromise = helper.freeBusy(resource);
+
+    return testPromise.then(function(result) {
+     
+      expect(result.kind).to.equal("calendar#freeBusy");
+    });
+  }),
+  
   it('insertEvent', function() {
     var helper = new CalendarHelper();
     var params = {

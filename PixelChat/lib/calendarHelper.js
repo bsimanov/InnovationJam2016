@@ -36,12 +36,33 @@ CalendarHelper.prototype.addEvent = function(params) {
   return deferred.promise;
 }
 
-
+CalendarHelper.prototype.freeBusy = function(resource) {
+  var deferred = q.defer();
+  
+  var auth = googleAuth.getAuth("goldenfreedomcoders");
+  var calendar = google.calendar('v3');
+  calendar.freebusy.query({
+    auth: auth,
+    resource: resource
+  }, function(err, response) {
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      deferred.reject(err);
+      return;
+    }
+    
+    console.log(JSON.stringify(response));
+    deferred.resolve(response);
+  });
+  
+  return deferred.promise;
+}
 
 
 function listEvents(auth, params, callback) {
   var calendar = google.calendar('v3');
   var minTime = (new Date(params.timeMin)).toISOString();
+  if (params.timeMax)
   console.log("Time Min Sent to Google: " + minTime);
   calendar.events.list({
     auth: auth,
