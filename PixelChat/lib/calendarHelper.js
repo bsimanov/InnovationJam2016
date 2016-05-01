@@ -41,10 +41,11 @@ CalendarHelper.prototype.addEvent = function(params) {
 
 function listEvents(auth, params, callback) {
   var calendar = google.calendar('v3');
+  var minTime = "Time Min Sent to Google: " (new Date(params.timeMin)).toISOString();
   calendar.events.list({
     auth: auth,
     calendarId: 'primary',
-    timeMin: (new Date(params.timeMin)).toISOString(),
+    timeMin: minTime,
     maxResults: 10,
     singleEvents: true,
     orderBy: 'startTime'

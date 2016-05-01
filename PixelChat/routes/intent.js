@@ -28,6 +28,7 @@ router.get('/',function(req, res, next) {
              
             
               result.say = saytext;
+              res.status(200).json(result);
               break;
             case "query_calendar":
               console.log("query_calendar");
@@ -49,6 +50,10 @@ router.get('/',function(req, res, next) {
                   result.say = "You have " + events.length + " meetings. First one " + events[0].summary + " starts " + start;
                   res.status(200).json(result);
                 }
+              },
+              function(reason) {
+                console.log(reason); // "Testing static reject"
+                throw new Error(reason);
               });
               break;
             default:
