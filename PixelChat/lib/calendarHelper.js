@@ -22,14 +22,15 @@ CalendarHelper.prototype.getFreeTime = function(params) {
 CalendarHelper.prototype.addEvent = function(params) {
   var deferred = q.defer();
   
-  console.log("Adding event to: " + params.calendar[0]);
-  var auth = googleAuth.getAuth(params.calendar[0]);
-  insertEvent(auth, function(err, response) {
+  //console.log("Adding event to: " + params.calendar[0]);
+  var auth = googleAuth.getAuth("goldenfreedomcoders");
+  insertEvent(auth, params, function(err, response) {
     if (err) {
       console.log("Error: " + err);
       deferred.reject(new Error(err));
     }
     else {
+      console.log(response);
       deferred.resolve(response);
     }
   });
@@ -74,18 +75,19 @@ function listEvents(auth, params, callback) {
   }, callback);
 }
 
-function insertEvent(auth, callback) {
+function insertEvent(auth,param, callback) {
     var event = {
     'summary': 'Google I/O 2015',
     'location': '800 Howard St., San Francisco, CA 94103',
     'description': 'A chance to hear more about Google\'s developer products.',
     'start': {
-      'dateTime': '2016-04-30T09:00:00-07:00',
-      'timeZone': 'America/Los_Angeles',
+      'dateTime': param.timeMin.toISOString(),
+    
     },
     'end': {
-      'dateTime': '2016-04-30T17:00:00-07:00',
-      'timeZone': 'America/Los_Angeles',
+      'dateTime': param.timeMax.toISOString(),
+      
+     
     },
     'recurrence': [
       'RRULE:FREQ=DAILY;COUNT=2'
@@ -103,10 +105,12 @@ function insertEvent(auth, callback) {
     },
   };
 
+
+console.log("Add Event Input" + JSON.stringify(event));
   var calendar = google.calendar('v3');
   calendar.events.insert({
     auth: auth,
-    calendarId: 'primary',
+    calendarId: "goldenfreedomcoders@gmail.com",
     resource: event,
   }, callback);
 }

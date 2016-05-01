@@ -33,21 +33,57 @@ router.get('/',function(req, res, next) {
           result.Intent = intent.outcomes[0].entities.intent[0].value;
           switch(result.Intent) {
             case "meeting_invite":
-              var saytext =  "Inviting Meeting ";
-              // time of day
-              if (intent.outcomes[0].entities.meeting_range)
-              {
-                
-                var fromdate = new Date(intent.outcomes[0].entities.meeting_range[0].from.value);
-                var todate = new Date(intent.outcomes[0].entities.meeting_range[0].to.value);
-                
-                saytext = saytext + fromdate.toLocaleString() + 
-                      " to " + todate.toLocaleString();
-              }
-             
             
-              result.say = saytext;
-              res.status(200).json(result);
+            
+              var dateparam =  firstEntityValue(intent.outcomes[0].entities,"datetime");
+              
+              if (meeting_range){
+                timeMin = new Date(intent.outcomes[0].entities.meeting_range[0].from.value);
+                timeMax = new Date(intent.outcomes[0].entities.meeting_range[0].to.value);
+              }
+              else {
+                if (dateparam.type == "interval") { 
+                     timeMin = dateparam.from.value;
+                      timeMax = dateparam.to.value;
+                }
+                else {
+                  switch (dateparam.grain) {
+                    case "hour":
+                      timeMin = new Date(dateparam.value);
+                      timeMax = new Date(dateparam.value).addHours(1);
+                      break;
+                    case "day":
+                      break;
+                  }
+                }
+              }
+              
+              var params = {
+                calendarId: "goldenfreedomcoders",
+                timeMin: timeMin,
+                timeMax: timeMax
+              };
+              console.log("Param---->" + JSON.stringify(params));
+              var helper = new CalendarHelper();
+              helper.getFreeTime(params)
+                .then(function(calResponse){
+                  console.log(JSON.stringify(calResponse));
+                        var events = calResponse.items;
+      
+                        if (events.length == 0) {
+                          helper.addEvent(params)
+                              .then(function(calResponse){
+                                  result.say = "Meeting scheduled"; 
+                                  res.status(200).json(result);
+                                });
+                        } else {
+                          result.say = "You appear to be busy during this time";
+                          res.status(200).json(result);
+                        }
+                      });
+              
+            
+              
               break;
             case "query_calendar":
             
@@ -64,13 +100,12 @@ router.get('/',function(req, res, next) {
                 
               }
               else {
-                if (dateparam.type) { 
-                  if (dateparam.type == "interval") {
+                if (dateparam.type == "interval") { 
+                  
                     
                      timeMin = dateparam.from.value;
                       timeMax = dateparam.to.value;
-                  }
-                  
+          
                 }
                 else {
                   switch (dateparam.grain) {
