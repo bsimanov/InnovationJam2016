@@ -64,7 +64,7 @@ function listEvents(auth, params, callback) {
   var calendar = google.calendar('v3');
   var minTime = (new Date(params.timeMin)).toISOString();
   if (params.timeMax)
-  console.log("Time Min Sent to Google: " + minTime);
+  console.log("list Even Param---->" + JSON.stringify(params));
   calendar.events.list({
     auth: auth,
     calendarId: 'primary',
@@ -82,11 +82,11 @@ function insertEvent(auth,param, callback) {
     'description': 'A chance to hear more about Google\'s developer products.',
     'start': {
       'dateTime': param.timeMin.toISOString(),
-    
+      'timeZone': "America/Los_Angeles"
     },
     'end': {
       'dateTime': param.timeMax.toISOString(),
-      
+            'timeZone': "America/Los_Angeles"
      
     },
     'recurrence': [

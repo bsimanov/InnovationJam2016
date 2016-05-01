@@ -67,7 +67,7 @@ router.get('/',function(req, res, next) {
               var helper = new CalendarHelper();
               helper.getFreeTime(params)
                 .then(function(calResponse){
-                  console.log(JSON.stringify(calResponse));
+                  console.log("getFreeTime--->" + JSON.stringify(calResponse));
                         var events = calResponse.items;
       
                         if (events.length == 0) {
