@@ -13,7 +13,7 @@ exports.getAuth =  function(emailId)
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
-  var token = fs.readFileSync(emailId + '-calendar-token.json');
+  var token = fs.readFileSync(emailId + '-token.json');
   oauth2Client.credentials = JSON.parse(token);
   return oauth2Client;
 }
