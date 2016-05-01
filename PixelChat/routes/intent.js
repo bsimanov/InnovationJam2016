@@ -53,6 +53,7 @@ router.get('/',function(req, res, next) {
               },
               function(reason) {
                 console.log(reason); // "Testing static reject"
+              
                 throw new Error(reason);
               });
               break;
@@ -69,7 +70,7 @@ router.get('/',function(req, res, next) {
         }
       })
       .catch(function(err){
-        res.status(500)
+        res.status(500);
       })
 });
 
