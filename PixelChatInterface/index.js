@@ -43,9 +43,9 @@ io.on('connection', function(socket){
       var msgToSend = msg.replace("@pixel", "");
       console.log(msgToSend);
       try {
-      req.get('http://pixelchat.cfapps.io/intent?msg=' + encodeURIComponent(msgToSend),
+      request.get('http://pixelchat.cfapps.io/intent?msg=' + encodeURIComponent(msgToSend),
         function(err, response, body){
-          res.person = '@pixel';
+       
           console.log("---" + body);
           if (err)
           {
@@ -67,6 +67,6 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(3000, function(){
+http.listen(process.env.VCAP_APP_PORT, function(){
   console.log('listening on *:3000');
 });
