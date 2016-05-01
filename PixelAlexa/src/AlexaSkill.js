@@ -25,6 +25,19 @@ AlexaSkill.prototype.requestHandlers = {
     },
 
     IntentRequest: function (event, context, response) {
+        console.log("Boris");
+        console.log('Received event:', JSON.stringify(event, null, 2));
+        console.log('Received context:', JSON.stringify(context, null, 2));
+    console.log('value1 =', event.key1);
+    console.log('value2 =', event.key2);
+    console.log('value3 =', event.key3);
+    console.log('remaining time =', context.getRemainingTimeInMillis());
+    console.log('functionName =', context.functionName);
+    console.log('AWSrequestID =', context.awsRequestId);
+    console.log('logGroupName =', context.logGroupName);
+    console.log('logStreamName =', context.logStreamName);
+    console.log('clientContext =', context.clientContext);
+        //console.log("Literal: " + request.session('literal'));
         this.eventHandlers.onIntent.call(this, event.request, event.session, response);
     },
 

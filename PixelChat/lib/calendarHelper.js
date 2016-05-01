@@ -77,9 +77,9 @@ function listEvents(auth, params, callback) {
 
 function insertEvent(auth,param, callback) {
     var event = {
-    'summary': 'Google I/O 2015',
+    'summary': 'Meet with Ben',
     'location': '800 Howard St., San Francisco, CA 94103',
-    'description': 'A chance to hear more about Google\'s developer products.',
+    'description': 'Enjoy your time @pixel.',
     'start': {
       'dateTime': param.timeMin.toISOString(),
       'timeZone': "America/Los_Angeles"
@@ -89,9 +89,6 @@ function insertEvent(auth,param, callback) {
             'timeZone': "America/Los_Angeles"
      
     },
-    'recurrence': [
-      'RRULE:FREQ=DAILY;COUNT=2'
-    ],
     'attendees': [
       {'email': 'lpage@example.com'},
       {'email': 'sbrin@example.com'},
