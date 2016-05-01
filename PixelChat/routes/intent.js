@@ -25,12 +25,12 @@ router.get('/',function(req, res, next) {
                 saytext = saytext + fromdate.toLocaleString() + 
                       " to " + todate.toLocaleString();
               }
-              // date
+             
             
               result.say = saytext;
               break;
             case "query_calendar":
-              result.say = "Your next appoint is at"  
+              result.say = "Your next meeting is at "  
               break;
             default:
             
