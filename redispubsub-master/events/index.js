@@ -41,7 +41,7 @@ module.exports = function(io) {
          */
         socket.on('chat', function(data) {
             var msg = JSON.parse(data);
-             
+
             if (msg.msg.indexOf('@pixel')> -1)
             {
                 var msgToSend = msg.msg.replace("@pixel", "");
@@ -53,7 +53,7 @@ module.exports = function(io) {
                             console.log("---" + body);
                             if (err) {
                                 console.log(err);
-                           
+
                                 var pixelmessage = {
                                     action: "message",
                                     user: "pixel",
@@ -74,7 +74,7 @@ module.exports = function(io) {
                     console.log(error);
                 }
             }
-            
+
             var reply = JSON.stringify({
                 action: 'message',
                 user: socket.handshake.session.user,
@@ -93,7 +93,7 @@ module.exports = function(io) {
             var reply = JSON.stringify({
                 action: 'control',
                 user: socket.handshake.session.user,
-                msg: ' joined the channel'
+                msg: 'joined the channel'
             });
              console.dir(reply);
             pub.publish('chat', reply);
@@ -104,9 +104,9 @@ module.exports = function(io) {
          When a message arrives, send it back to browser using socket.io
          */
         sub.on('message', function(channel, message) {
-            
-            
-            
+
+
+
 
             socket.emit(channel, message);
         });
