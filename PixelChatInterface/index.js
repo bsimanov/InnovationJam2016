@@ -4,26 +4,40 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var req = require('request');
-var people = [];
+var people = {};
 var poundMessage = [];
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/main.css', function(req, res){
+  res.sendFile(__dirname + '/main.css');
+});
+
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     console.log(msg.indexOf("#chat") );
     var sessionid = socket.id;
+    var res = {
+      person: "",
+      msg: ""
+    };
 
-    if (msg.indexOf("#chat") > -1 )
+    if (msg.indexOf("#join") > -1 )
     {
       newchatperson = msg.substring(6);
-      people.push(newchatperson + sessionid);
+      people[sessionid] = newchatperson;
       console.log(people);
       console.log(people.length);
       msg = "Hi " + newchatperson;
     }
+
+    if (people[sessionid] !== null)
+    {
+      res.person = people[sessionid];
+    }
+
     if (msg.indexOf("@pixel") > -1 )
     {
       var msgToSend = msg.replace("@pixel", "");
@@ -31,14 +45,16 @@ io.on('connection', function(socket){
       try {
       req.get('http://pixelchat.cfapps.io/intent?msg=' + encodeURIComponent(msgToSend),
         function(err, response, body){
+          res.person = '@pixel';
           console.log("---" + body);
           if (err)
           {
             console.log(err);
-            io.emit('chat message','Pixel do not understand the msg');
+            res.say = 'Pixel does not understand the msg';
+            io.emit('chat message', JSON.stringify(res));
           } else {
-
-            io.emit('chat message',JSON.parse(body).say);
+            res.msg = JSON.parse(body).say;
+            io.emit('chat message', JSON.stringify(res));
           }
         });
       } catch (err)
@@ -46,7 +62,8 @@ io.on('connection', function(socket){
         console.log(err);
       }
     }
-    io.emit('chat message', msg);
+    res.msg = msg;
+    io.emit('chat message', JSON.stringify(res));
   });
 });
 

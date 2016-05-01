@@ -2,33 +2,45 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+    <ul class="chat-list" id="messages"></ul>
+    <form class="chat-input" action="">
+      <input class="chat-input__input" id="m" autocomplete="off" /><button class="chat-input__send">Send</button>
     </form>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
+      var user;
       $('form').submit(function(){
+
+        if ($('#m').val().indexOf("#join") > -1 )
+        {
+          user = $('#m').val().substring(6);
+        }
         socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
       });
       socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
+        var res = jQuery.parseJSON(msg);
+
+        switch (res.person)
+        {
+            case '@pixel':
+              $('#messages').append($('<li class="chat-message__text chat-message__text--pixel">').text(res.msg));
+              $('#messages').append($('<span class="chat-message__name">').text(res.person))
+              break;
+            case user:
+              $('#messages').append($('<li class="chat-message__text chat-message__text--me">').text(res.msg));
+              $('#messages').append($('<span class="chat-message__name chat-message__name--me">').text(res.person))
+              break;
+            default:
+              $('#messages').append($('<li class="chat-message__text">').text(res.msg));
+              $('#messages').append($('<span class="chat-message__name">').text(res.person))
+        }
       });
     </script>
   </body>

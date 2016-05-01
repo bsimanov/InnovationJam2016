@@ -16,3 +16,6 @@ node_modules
 # User Environment Variables
 .lock-wscript
 .Rproj.user
+.lock-wscript
+
+.DS_Store
