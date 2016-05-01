@@ -27,15 +27,16 @@ library(plyr)
 
 ## INPUT EMAILS GO HERE
 ## this is the training data set... 
-easyham.path <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/easy_ham3/"
+easyham.path <-"/Users/plim/Documents/node-upload/InnovationJam2016/PriorityInbox/data/easy_ham_2/“
 
 ## you can call it whatever you want, but only keep 1 file here
-onetime.path <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/inbox/"
-onetime.fn   <-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/data/inbox/email.txt"
+onetime.path <-"/Users/plim/Documents/node-upload/InnovationJam2016/PriorityInbox/data/inbox/"
+onetime.fn   <-"/Users/plim/Documents/node-upload/InnovationJam2016/PriorityInbox/data/inbox/email.txt"
 
 ## OUTPUT GOES HERE
 ## this is the classification and training of emails... use this to pull test cases from.. .look up priority column and the path of the file to get the 'content'
-output.fn5<-"c:/InnovationJam2016/Source/InnovationJam2016/PriorityInbox/output/final_df.csv"
+
+output.fn5   <-“/Users/plim/Documents/node-upload/InnovationJam2016/PriorityInbox/output/finaldf.csv"
 
 
 # We define a set of function that will extract the data
