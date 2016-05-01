@@ -31,10 +31,11 @@ router.get('/',function(req, res, next) {
               res.status(200).json(result);
               break;
             case "query_calendar":
+              var timeMin = intent.outcomes[0].entities.datetime[0].value;
               console.log("query_calendar");
               var params = {
                 calendarId: "goldenfreedomcoders",
-                timeMin: "2016-04-30"
+                timeMin: timeMin
               };
               
               var helper = new CalendarHelper();
