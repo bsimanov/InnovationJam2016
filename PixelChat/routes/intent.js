@@ -96,7 +96,7 @@ router.get('/',function(req, res, next) {
               var timeMin;
               var timeMax; 
               
-              if (meeting_range){
+              if (meeting_range){ 
                 
               }
               else {
@@ -115,6 +115,8 @@ router.get('/',function(req, res, next) {
 
                       break;
                     case "day":
+                    timeMin = dateparam.value;
+                      timeMax = new Date(dateparam.value).addHours(24);
                       break;
 
          
