@@ -1,5 +1,3 @@
-//var fs = require('fs');
-// var readline = require('readline');
 var q = require('Q');
 var google = require('googleapis');
 var googleAuth = require('./../lib/googleAuth');
@@ -10,9 +8,8 @@ CalendarHelper.prototype.getFreeTime = function(params) {
   var deferred = q.defer();
   
   var auth = googleAuth.getAuth(params.calendarId);
-  listEvents(auth, function(err, response) {
-    if (err)
-    {
+  listEvents(auth, params, function(err, response) {
+    if (err) {
        console.log(err);
        deferred.reject(new Error(err));
     } else {
@@ -42,12 +39,12 @@ CalendarHelper.prototype.addEvent = function(params) {
 
 
 
-function listEvents(auth, callback) {
+function listEvents(auth, params, callback) {
   var calendar = google.calendar('v3');
   calendar.events.list({
     auth: auth,
     calendarId: 'primary',
-    timeMin: (new Date()).toISOString(),
+    timeMin: (new Date(params.timeMin)).toISOString(),
     maxResults: 10,
     singleEvents: true,
     orderBy: 'startTime'

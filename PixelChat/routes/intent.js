@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const WIT_TOKEN = 'I3YIED2VEPKOWTI42FXITQOMLEOWJ544';
-
+var CalendarHelper = require('./../lib/calendarHelper');
 var WitApi =  require('./../lib/witapi');
 var client = new WitApi(WIT_TOKEN);
 router.get('/',function(req, res, next) {
@@ -30,12 +30,31 @@ router.get('/',function(req, res, next) {
               result.say = saytext;
               break;
             case "query_calendar":
-              result.say = "Your next meeting is at "  
+              console.log("query_calendar");
+              var params = {
+                calendarId: "goldenfreedomcoders",
+                timeMin: "2016-04-30"
+              };
+              
+              var helper = new CalendarHelper();
+              var promise = helper.getFreeTime(params);
+
+              promise.then(function (calResponse) {
+                var events = calResponse.items;
+                if (events.length == 0) {
+                  result.say = "Looks like your schedule is clear.";
+                  res.status(200).json(result);
+                } else {
+                  var start = events[0].start.dateTime || events[0].start.date;
+                  result.say = "You have " + events.length + " meetings. First one " + events[0].summary + " starts " + start;
+                  res.status(200).json(result);
+                }
+              });
               break;
             default:
             
           }
-          res.status(200).json(result);
+          //res.status(200).json(result);
         }
         else
         {
@@ -43,11 +62,6 @@ router.get('/',function(req, res, next) {
           res.status(200).json(result);
           
         }
-        
-        
-        
-        
-
       })
       .catch(function(err){
         res.status(500)
