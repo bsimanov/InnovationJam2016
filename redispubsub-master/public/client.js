@@ -121,7 +121,7 @@ $(document).ready(function() {
                         // normal chat message
                     } else {
                         messageView.find('.user').text(message.user);
-                        messageView.find('.message').text(': ' + message.msg);
+                        messageView.find('.message').text(message.msg);
                     }
                     break;
                 case 'control':

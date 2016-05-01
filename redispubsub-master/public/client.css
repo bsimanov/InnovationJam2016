@@ -1,111 +1,162 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,300,400italic);
+
+:root {
+  --gray-100: #f7f7f7;
+  --gray-200: #bec9cd;
+  --gray-300: #8da2aa;
+  --gray-400: #7e8893;
+  --gray-500: #6e767c;
+  --red-100: #e31b23;
+  --red-200: #cc2d30;
+  --blue-100: #1896e7;
+  --blue-200: #0072bc;
+  --blue-300: #004470;
+  --blue-400: #2c3e50;
+  --green-100: #31b55c;
+}
+
 * {
-    font-family: Georgia;
+  box-sizing: border-box;
+  color: var(--blue-300);
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+body {
+  background-color: var(--gray-100);
 }
 
 a {
-    color: #000;
-    text-decoration: none;
+  color: #000;
+  text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
+input[type="text"] {
+  border: 1px solid var(--gray-200);
+  border-radius: 4px;
+  box-shadow: inset 1px 1px 3px rgba(0,0,0, 0.10);
+  font-size: 20px;
+  padding: 10px;
+  margin: 0 10px;
 }
 
-div.bordered {
-    margin: 0 auto;
-    width: 600px;
-    padding: 20px;
-    text-align: center;
-    border: 1px solid #ddd;
-    -webkit-border-radius: 20px;
+.bordered {
+  background-color: #fff;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.bordered--ask {
+  padding: 20px;
 }
 
 #error {
-    background-color: #BA0000;
-    color: #fff;
-    font-weight: bold;
+  background-color: #BA0000;
+  color: #fff;
+  font-weight: bold;
 }
 
-#ask {
-    font-size: 20pt;
+.join {
+  background-color: var(--red-200);
+  border-radius: 4px;
+  color: #fff;
+  padding: 10px;
 }
-
-#ask input {
-    font-size: 20pt;
-    padding: 10px;
-    margin: 0 10px;
-}
-
-#ask span.join {
-    padding: 10px;
-    background-color: #ddd;
-    -webkit-border-radius: 10px;
+.join:hover {
+  background-color: #e8393c;
+  box-shadow: 2px 2px 2px rgba(0,0,0, 0.25);
 }
 
 #channel {
-    height: 480px;
-    position: relative;
+  margin-top: 1em;
+  position: relative;
 }
 
 #channel div#descr {
-    position: absolute;
-    left: -10px;
-    top: -190px;
-    font-size: 13px;
-    text-align: left;
-    line-height: 20px;
-    padding: 5px;
-    width: 630px;
+  position: absolute;
+  left: -10px;
+  top: -190px;
+  font-size: 13px;
+  text-align: left;
+  line-height: 20px;
+  padding: 5px;
+  width: 630px;
 }
 
 div#msgs {
-    overflow-y: scroll;
-    height: 400px;
+  overflow-y: scroll;
+  height: 400px;
 }
 
 div#msgs ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: left;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
 }
 
 div#msgs li {
-    line-height: 20px;
+  line-height: 20px;
 }
 
-div#msgs li span.user {
-    color: #ff9900;
+.user {
+  color: var(--blue-300);
+  font-weight: bold;
+}
+.user::after{
+  content:":";
 }
 
 div#msgs li span.user.self {
-    color: #aa2211;
+  color: #aa2211;
 }
 
 div#msgs li span.time {
-    float: right;
-    margin-right: 5px;
-    color: #aaa;
-    font-family: "Courier New";
-    font-size: 12px;
+  float: right;
+  margin-right: 5px;
+  color: #aaa;
+  font-family: "Courier New";
+  font-size: 12px;
 }
 
-div#msgs li.control {
-    text-align: center;
+.control {
+  border: 0;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  text-align: center;
+}
+.control .message {
+  border: 0;
+  color: var(--gray-300);
+}
+.control .user{
+  color: var(--gray-300);
 }
 
-div#msgs li.control span.message {
-    color: #aaa;
+.message {
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 0;
+  padding: 1em 2%;
+}
+.message:first-of-type {
+  border-bottom: 1px solid var(--gray-200);
 }
 
 div#input {
-    text-align: left;
-    margin-top: 20px;
+  text-align: left;
 }
 
-div#input #message {
-    width: 600px;
-    border: 5px solid #bbb;
-    -webkit-border-radius: 3px;
-    font-size: 30pt;
+.message-input {
+  background-color: var(--blue-400);
+  border-radius: 0 0 4px 4px;
+  margin: 0;
+  padding: 1em 2%;
+}
+
+.message-input__input {
+  width: 98%;
+  font-size: 2em;
 }
