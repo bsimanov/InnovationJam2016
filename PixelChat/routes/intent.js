@@ -4,6 +4,25 @@ const WIT_TOKEN = 'I3YIED2VEPKOWTI42FXITQOMLEOWJ544';
 var CalendarHelper = require('./../lib/calendarHelper');
 var WitApi =  require('./../lib/witapi');
 var client = new WitApi(WIT_TOKEN);
+
+const firstEntityValue = (entities, entity) => {
+  const val = entities && entities[entity] &&
+    Array.isArray(entities[entity]) &&
+    entities[entity].length > 0 &&
+    entities[entity][0]
+  ;
+  if (!val) {
+    return null;
+  }
+  return val;
+  //return typeof val === 'object' ? val.value : val;
+};
+
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h);
+    return this;
+}
+
 router.get('/',function(req, res, next) {
     client.getIntent(req.query.msg)
       .then(function(intent) {
@@ -31,11 +50,49 @@ router.get('/',function(req, res, next) {
               res.status(200).json(result);
               break;
             case "query_calendar":
-              var timeMin = intent.outcomes[0].entities.datetime[0].value;
+            
+            
+              var freetime = firstEntityValue(intent.outcomes[0].entities, "freetime");
+              
+              var dateparam =  firstEntityValue(intent.outcomes[0].entities,"datetime");
+             
+              var meeting_range =  firstEntityValue(intent.outcomes[0].entities,"meeting_range");
+              var timeMin;
+              var timeMax; 
+              
+              if (meeting_range){
+                
+              }
+              else {
+                if (dateparam.type) { 
+                  if (dateparam.type == "interval") {
+                    
+                     timeMin = dateparam.from.value;
+                      timeMax = dateparam.to.value;
+                  }
+                  
+                }
+                else {
+                  switch (dateparam.grain) {
+                    case "hour":
+                      timeMin = dateparam.value;
+                      timeMax = new Date(dateparam.value).addHours(1);
+
+                      break;
+                    case "day":
+                      break;
+
+         
+
+                  }
+                }
+              }
+              
               console.log("query_calendar");
               var params = {
                 calendarId: "goldenfreedomcoders",
-                timeMin: timeMin
+                timeMin: timeMin,
+                timeMax: timeMax
               };
               
               var helper = new CalendarHelper();
