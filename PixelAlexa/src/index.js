@@ -27,6 +27,7 @@ var APP_ID = undefined; //replace with "amzn1.echo-sdk-ams.app.[your-unique-valu
  * The AlexaSkill prototype and helper functions
  */
 var AlexaSkill = require('./AlexaSkill');
+var request = require('request');
 
 /**
  * HelloWorld is a child of AlexaSkill.
@@ -64,7 +65,58 @@ HelloWorld.prototype.eventHandlers.onSessionEnded = function (sessionEndedReques
 HelloWorld.prototype.intentHandlers = {
     // register custom intent handlers
     "HelloWorldIntent": function (intent, session, response) {
-        response.tellWithCard("Email from Joe!", "Pixel", "Email from Lauren!");
+      var question;
+      var date;
+      console.log("Slots: " + JSON.stringify(intent.slots));
+      if (intent.slots && intent.slots.Question) {
+        question = intent.slots.Question.value;
+      }
+      console.log("Question: "  + question);
+      if (intent.slots && intent.slots.Date) {
+        date = intent.slots.Date.value;
+      }
+      console.log("Date: " + date);
+
+      var msg = "Lets%20meet%20today";
+      if (question && date) {
+        if (question === "when") {
+          msg = "When%20is%20my%20meeting%20" + date;
+        }
+        if (question === "what") {
+          msg = "What%20meetings%20do%20I%20have%20" + date;
+        }
+        if (question === "do I") {
+          msg = "Do%20I%20have%20a%20meeting%20" + date;
+        }
+      }
+      console.log("Msg: " + msg);
+      console.log(intent);
+      console.log(JSON.stringify(intent));
+      var options = {
+        method: 'GET',
+        url: 'http://pixelchat.cfapps.io/intent?msg=' + msg
+      }
+      request(options, function(error, res, body) {
+         if (error)
+         {
+             console.log(error);
+             response.tellWithCard("BROKEN: Email from Joe, Boris!!", "Pixel", "Email from Lauren!");
+         } else {
+           console.log("Response from Pixel: " + body);
+           var fromWit = JSON.parse(body);
+           //console.log(JSON.stringify(body));
+           response.tellWithCard(fromWit.say, "Pixel", "Email from Lauren!");
+            //  console.log("Response: " + JSON.stringify(response) + "--\n" + body);
+            //  if (response.statusCode === 200) {
+            //    // Do nothing
+            //  }
+            //  else
+            //  {
+            //    console.log("Invalid response: " + response.status);
+            //  }
+         }
+      });
+      // response.tellWithCard("Email from Joe, Boris!!", "Pixel", "Email from Lauren!");
     },
     "AMAZON.HelpIntent": function (intent, session, response) {
         response.ask("You can ask me to read your important email!", "You can say read my important email!");
@@ -77,4 +129,3 @@ exports.handler = function (event, context) {
     var helloWorld = new HelloWorld();
     helloWorld.execute(event, context);
 };
-
